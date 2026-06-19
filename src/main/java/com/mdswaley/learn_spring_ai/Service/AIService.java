@@ -1,5 +1,6 @@
 package com.mdswaley.learn_spring_ai.Service;
 
+import com.mdswaley.learn_spring_ai.DTO.Joke;
 import lombok.RequiredArgsConstructor;
 import org.springframework.ai.chat.client.ChatClient;
 import org.springframework.ai.chat.client.advisor.SimpleLoggerAdvisor;
@@ -50,5 +51,26 @@ public class AIService {
                 .chatClientResponse();
 
         return response.chatResponse().getResult().getOutput().getText();
+    }
+
+    public String getJoke2(String topic){
+        String systemPrompt = """
+                you are a sarcastic joker, you make poetic jokes in 4 lines.
+                you don't make joke about politics.
+                give a joke on topic: {topic}
+                """;
+
+        PromptTemplate promptTemplate = new PromptTemplate(systemPrompt);
+        String render = promptTemplate.render(Map.of("topic", topic));
+
+        var response =  chatClient
+                .prompt()
+                .advisors(new SimpleLoggerAdvisor())
+                .user(render)
+                .call()
+                .entity(Joke.class);  // This will help to convert text response from
+        // chatClient to java Object which is Joke.class
+
+        return response.text();
     }
 }

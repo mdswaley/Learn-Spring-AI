@@ -25,4 +25,10 @@ class AIServiceTest {
         System.out.println(j);
     }
 
+    @Test
+    public void getJokeTest2(){
+        var j = aiService.getJoke2("Cats");
+        System.out.println(j);
+    }
+
 }
