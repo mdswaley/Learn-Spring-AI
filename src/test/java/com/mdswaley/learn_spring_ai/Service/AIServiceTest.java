@@ -39,4 +39,15 @@ class AIServiceTest {
         }
     }
 
+    @Test
+    public void testStoreData(){
+        aiService.ingestDataToVectorStore("This is the big text."); // this is use for to store the float
+        // of array which is converted from the given text in the database.
+    }
+
+    @Test
+    public void testStoreListData(){
+        aiService.ingestDataToVectorStoreListOfData();
+    }
+
 }

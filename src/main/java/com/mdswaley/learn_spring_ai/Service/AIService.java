@@ -6,9 +6,13 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.ai.chat.client.ChatClient;
 import org.springframework.ai.chat.client.advisor.SimpleLoggerAdvisor;
 import org.springframework.ai.chat.prompt.PromptTemplate;
+import org.springframework.ai.document.Document;
 import org.springframework.ai.embedding.EmbeddingModel;
+import org.springframework.ai.vectorstore.VectorStore;
 import org.springframework.stereotype.Service;
 
+import java.awt.*;
+import java.util.List;
 import java.util.Map;
 import java.util.TimeZone;
 
@@ -17,10 +21,77 @@ import java.util.TimeZone;
 public class AIService {
     private final ChatClient chatClient;
     private final EmbeddingModel embeddingModel;
+    private final VectorStore vectorStore;
 
     public float[] getEmbedding(String text){
         return embeddingModel.embed(text);
     }
+
+    public void ingestDataToVectorStore(String text){
+        Document document = new Document(text);
+
+        vectorStore.add(List.of(document)); // it will use embedding model internally after converting array of float it will store here.
+    }
+
+    public void ingestDataToVectorStoreListOfData(){
+        List<Document> marvelMovies = List.of(
+                new Document(
+                        """
+                        Iron Man is a 2008 Marvel superhero movie featuring Tony Stark,
+                        a genius billionaire who builds a powered suit of armor and becomes Iron Man.
+                        """,
+                        Map.of(
+                                "title", "Iron Man",
+                                "year", 2008,
+                                "hero", "Tony Stark",
+                                "genre", "Action"
+                        )
+                ),
+
+                new Document(
+                        """
+                        Captain America: The First Avenger follows Steve Rogers,
+                        a weak young man transformed into a super soldier during World War II.
+                        """,
+                        Map.of(
+                                "title", "Captain America: The First Avenger",
+                                "year", 2011,
+                                "hero", "Steve Rogers",
+                                "genre", "Action"
+                        )
+                ),
+
+                new Document(
+                        """
+                        The Avengers brings together Iron Man, Captain America, Thor,
+                        Hulk, Black Widow, and Hawkeye to stop Loki's invasion of Earth.
+                        """,
+                        Map.of(
+                                "title", "The Avengers",
+                                "year", 2012,
+                                "team", "Avengers",
+                                "genre", "Superhero"
+                        )
+                ),
+
+                new Document(
+                        """
+                        Avengers: Infinity War follows the Avengers as they attempt
+                        to stop Thanos from collecting all six Infinity Stones.
+                        """,
+                        Map.of(
+                                "title", "Avengers: Infinity War",
+                                "year", 2018,
+                                "villain", "Thanos",
+                                "genre", "Superhero"
+                        )
+                )
+        );
+
+        vectorStore.add(marvelMovies);
+    }
+
+
 
     public String getJoke(String topic){
         String systemPrompt = """
