@@ -1,6 +1,7 @@
 package com.mdswaley.learn_spring_ai.Service;
 
 import com.mdswaley.learn_spring_ai.DTO.Joke;
+import jakarta.annotation.PostConstruct;
 import lombok.RequiredArgsConstructor;
 import org.springframework.ai.chat.client.ChatClient;
 import org.springframework.ai.chat.client.advisor.SimpleLoggerAdvisor;
@@ -9,6 +10,7 @@ import org.springframework.ai.embedding.EmbeddingModel;
 import org.springframework.stereotype.Service;
 
 import java.util.Map;
+import java.util.TimeZone;
 
 @Service
 @RequiredArgsConstructor
@@ -78,5 +80,10 @@ public class AIService {
         // chatClient to java Object which is Joke.class
 
         return response.text();
+    }
+
+    @PostConstruct
+    public void checkTimezone() {
+        System.out.println("Java Timezone = " + TimeZone.getDefault().getID());
     }
 }
