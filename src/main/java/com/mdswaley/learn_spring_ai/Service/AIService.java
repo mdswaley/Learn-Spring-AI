@@ -8,6 +8,7 @@ import org.springframework.ai.chat.client.advisor.SimpleLoggerAdvisor;
 import org.springframework.ai.chat.prompt.PromptTemplate;
 import org.springframework.ai.document.Document;
 import org.springframework.ai.embedding.EmbeddingModel;
+import org.springframework.ai.vectorstore.SearchRequest;
 import org.springframework.ai.vectorstore.VectorStore;
 import org.springframework.stereotype.Service;
 
@@ -89,6 +90,18 @@ public class AIService {
         );
 
         vectorStore.add(marvelMovies);
+    }
+
+//    public List<Document> getSimilaritySearch(String str){
+//        return vectorStore.similaritySearch(str);
+//    }
+
+    public List<Document> getSimilaritySearch(String str){
+        return vectorStore.similaritySearch(SearchRequest.builder()
+                        .query(str)
+                        .topK(1)
+                        .filterExpression("title == 'Iron Man'")
+                        .build());
     }
 
 

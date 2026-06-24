@@ -50,4 +50,11 @@ class AIServiceTest {
         aiService.ingestDataToVectorStoreListOfData();
     }
 
+    @Test
+    public void getSimilaritySearch(){
+//        var res = aiService.getSimilaritySearch("infinity stone");
+        var res = aiService.getSimilaritySearch("superhero movies");
+        System.out.println(res);
+    }
+
 }
