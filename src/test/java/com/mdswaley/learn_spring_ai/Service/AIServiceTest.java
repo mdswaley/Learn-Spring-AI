@@ -53,7 +53,8 @@ class AIServiceTest {
     @Test
     public void getSimilaritySearch(){
 //        var res = aiService.getSimilaritySearch("infinity stone");
-        var res = aiService.getSimilaritySearch("superhero movies");
+        String s = "superhero Movies";
+        var res = aiService.getSimilaritySearch(s);
         System.out.println(res);
     }
 
