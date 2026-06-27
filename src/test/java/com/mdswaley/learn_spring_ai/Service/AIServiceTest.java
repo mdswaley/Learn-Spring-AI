@@ -58,4 +58,10 @@ class AIServiceTest {
         System.out.println(res);
     }
 
+    @Test
+    public void getAskAI(){
+        var res = aiService.askAI("what is Apple.");
+        System.out.println(res);
+    }
+
 }
