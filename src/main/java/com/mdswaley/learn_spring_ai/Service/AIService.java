@@ -67,7 +67,7 @@ public class AIService {
         List<Document> documents = vectorStore.similaritySearch(SearchRequest.builder()
                         .query(prompt)
                         .topK(2)
-                        .filterExpression("topic == 'ai' or topic == 'vectorstore'")
+//                        .filterExpression("topic == 'spring-ai' or topic == 'vectorstore'")
                 .build());
 
         String context = documents.stream()
@@ -81,6 +81,7 @@ public class AIService {
                 return chatClient.prompt()
                         .system(systemPrompt)
                 .user(prompt)
+                        .advisors(new SimpleLoggerAdvisor())
                 .call()
                 .content();
     }

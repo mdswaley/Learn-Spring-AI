@@ -60,7 +60,7 @@ class AIServiceTest {
 
     @Test
     public void getAskAI(){
-        var res = aiService.askAI("what is Apple.");
+        var res = aiService.askAI("what is vector store.");
         System.out.println(res);
     }
 
