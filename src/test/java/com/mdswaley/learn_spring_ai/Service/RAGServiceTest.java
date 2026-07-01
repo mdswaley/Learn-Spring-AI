@@ -16,4 +16,10 @@ class RAGServiceTest {
         ragService.ingestPDFToVectorStore();
     }
 
+    @Test
+    public void getAskAI(){
+        var res = ragService.askAI("how to connect to my discord account?");
+        System.out.println(res);
+    }
+
 }
