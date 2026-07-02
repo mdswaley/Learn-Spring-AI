@@ -1,6 +1,7 @@
 package com.mdswaley.learn_spring_ai.config;
 
 import org.springframework.ai.chat.client.ChatClient;
+import org.springframework.ai.chat.client.advisor.SimpleLoggerAdvisor;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 
@@ -9,7 +10,9 @@ public class AIConfig {
 
     @Bean
     public ChatClient chatClient1(ChatClient.Builder builder){
-        return builder.build();
+        return builder
+                .defaultAdvisors(new SimpleLoggerAdvisor())  // we not need to mention is any other services.
+                .build();
     }
 
 }

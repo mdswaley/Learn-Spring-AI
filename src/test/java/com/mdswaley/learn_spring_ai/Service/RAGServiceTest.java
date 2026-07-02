@@ -22,4 +22,11 @@ class RAGServiceTest {
         System.out.println(res);
     }
 
+    @Test
+    public void getAskAIWithAdvisors(){
+        String res = ragService.askAIWithAdvisors("who i am", "md123");  // If you use a different userId, the conversation
+        // memory associated with the previous user will not be available, so the chat model will treat you as a new user.
+        System.out.println(res);
+    }
+
 }

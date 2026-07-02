@@ -2,7 +2,9 @@ package com.mdswaley.learn_spring_ai.Service;
 
 import lombok.RequiredArgsConstructor;
 import org.springframework.ai.chat.client.ChatClient;
-import org.springframework.ai.chat.client.advisor.SimpleLoggerAdvisor;
+
+import org.springframework.ai.chat.client.advisor.vectorstore.VectorStoreChatMemoryAdvisor;
+import org.springframework.ai.chat.memory.ChatMemory;
 import org.springframework.ai.chat.prompt.PromptTemplate;
 import org.springframework.ai.document.Document;
 import org.springframework.ai.embedding.EmbeddingModel;
@@ -17,6 +19,7 @@ import org.springframework.stereotype.Service;
 import java.util.List;
 import java.util.Map;
 import java.util.stream.Collectors;
+
 
 @Service
 @RequiredArgsConstructor
@@ -62,7 +65,7 @@ public class RAGService {
         return chatClient.prompt()
                 .system(systemPrompt)
                 .user(prompt)
-                .advisors(new SimpleLoggerAdvisor())
+//                .advisors(new SimpleLoggerAdvisor())  // no need to mention here bcz we already define in config class.
                 .call()
                 .content();
     }
@@ -124,5 +127,26 @@ public class RAGService {
                         Map.of("topic", "chat-model")
                 )
         );
+    }
+
+
+    public String askAIWithAdvisors(String prompt, String userId){
+        return chatClient.prompt()
+                .system("""
+                        You are an AI assistant called cody.
+                        Great users with Name (Cody) and the user name if you know their name.
+                        Answer in a friendly, conversational tone.
+                        """)
+                .user(prompt)
+                .advisors(
+                        VectorStoreChatMemoryAdvisor.builder(vectorStore)
+                                .defaultTopK(4)
+                        .build())
+                .advisors(a -> a.param(
+                        ChatMemory.CONVERSATION_ID,  // here we use conversation_id bcz we want to get conversation history
+                        userId   // for a specific user (userId).
+                ))
+                .call()
+                .content();
     }
 }
