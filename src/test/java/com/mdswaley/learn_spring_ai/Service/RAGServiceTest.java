@@ -24,7 +24,7 @@ class RAGServiceTest {
 
     @Test
     public void getAskAIWithAdvisors(){
-        String res = ragService.askAIWithAdvisors("my name is Swaley and DOB is 9th June 2003. can you tell me the way to cuttack odisha", "swaley123");  // If you use a different userId, the conversation
+        String res = ragService.askAIWithAdvisors("what is the history of puri temple", "swaley123");  // If you use a different userId, the conversation
         // memory associated with the previous user will not be available, so the chat model will treat you as a new user.
         System.out.println(res);
     }
