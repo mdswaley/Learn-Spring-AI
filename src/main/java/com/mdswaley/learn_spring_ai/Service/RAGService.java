@@ -3,6 +3,7 @@ package com.mdswaley.learn_spring_ai.Service;
 import lombok.RequiredArgsConstructor;
 import org.springframework.ai.chat.client.ChatClient;
 
+import org.springframework.ai.chat.client.advisor.MessageChatMemoryAdvisor;
 import org.springframework.ai.chat.client.advisor.vectorstore.VectorStoreChatMemoryAdvisor;
 import org.springframework.ai.chat.memory.ChatMemory;
 import org.springframework.ai.chat.prompt.PromptTemplate;
@@ -27,6 +28,7 @@ public class RAGService {
     private final ChatClient chatClient;
     private final EmbeddingModel embeddingModel;
     private final VectorStore vectorStore;
+    private final ChatMemory chatMemory;
 
     @Value("classpath:faq.pdf")
     Resource pdfFile;
@@ -139,9 +141,15 @@ public class RAGService {
                         """)
                 .user(prompt)
                 .advisors(
+
+                        MessageChatMemoryAdvisor.builder(chatMemory).build(),
+
+
+
                         VectorStoreChatMemoryAdvisor.builder(vectorStore)
                                 .defaultTopK(4)
                         .build())
+
                 .advisors(a -> a.param(
                         ChatMemory.CONVERSATION_ID,  // here we use conversation_id bcz we want to get conversation history
                         userId   // for a specific user (userId).
@@ -150,3 +158,5 @@ public class RAGService {
                 .content();
     }
 }
+
+//  ctrl + shift + l => for arrangement.
