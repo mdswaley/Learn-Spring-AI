@@ -1,5 +1,6 @@
 package com.mdswaley.learn_spring_ai.Service;
 
+import com.mdswaley.learn_spring_ai.advisor.TokenUsageAdvisor;
 import lombok.RequiredArgsConstructor;
 import org.springframework.ai.chat.client.ChatClient;
 
@@ -144,10 +145,10 @@ public class RAGService {
                         """)
                 .user(prompt)
                 .advisors(
-                        SafeGuardAdvisor.builder().sensitiveWords(List.of(  // // Here we are using safeGuardAdvisor so that the mention text is consider as sensitive data.
-                                "politics",
-                                "gaming"
-                        )).build(),
+//                        SafeGuardAdvisor.builder().sensitiveWords(List.of(  // // Here we are using safeGuardAdvisor so that the mention text is consider as sensitive data.
+//                                "politics",
+//                                "gaming"
+//                        )).build(),
 
                         MessageChatMemoryAdvisor.builder(chatMemory).build(),  // for short term msg storage
 
@@ -162,7 +163,9 @@ public class RAGService {
                                         .filterExpression("file_name == 'faq.pdf'")
                                         .topK(4)
                                         .build())
-                                .build()
+                                .build(),
+
+                        TokenUsageAdvisor.builder().build()  // custom advisor for calculating token usage and time taken to complete cycle
 
                 )
 

@@ -36,10 +36,16 @@ class RAGServiceTest {
 //        System.out.println(res);
 //    }
 
+//    @Test
+//    public void getAskAIWithAdvisors(){
+//        String res = ragService.askAIWithAdvisors("Tell me about mobile Gaming", "swaley123"); // Here we are using safeGuardAdvisor
+////        so that the mention text is consider as sensitive data. so it will return :- "I'm unable to respond to that due to sensitive content. Could we rephrase or discuss something else?"
+//        System.out.println(res);
+//    }
+
     @Test
     public void getAskAIWithAdvisors(){
-        String res = ragService.askAIWithAdvisors("Tell me about mobile Gaming", "swaley123"); // Here we are using safeGuardAdvisor
-//        so that the mention text is consider as sensitive data. so it will return :- "I'm unable to respond to that due to sensitive content. Could we rephrase or discuss something else?"
+        String res = ragService.askAIWithAdvisors("Tell me something about me?", "swaley123");
         System.out.println(res);
     }
 
