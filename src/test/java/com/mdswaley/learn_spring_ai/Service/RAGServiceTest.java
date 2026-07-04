@@ -29,10 +29,17 @@ class RAGServiceTest {
 //        System.out.println(res);
 //    }
 
+//    @Test
+//    public void getAskAIWithAdvisors(){
+//        String res = ragService.askAIWithAdvisors("what is my date of birth?", "swaley123");  // If you use a different userId, the conversation
+//        // memory associated with the previous user will not be available, so the chat model will treat you as a new user.
+//        System.out.println(res);
+//    }
+
     @Test
     public void getAskAIWithAdvisors(){
-        String res = ragService.askAIWithAdvisors("what is my date of birth?", "swaley123");  // If you use a different userId, the conversation
-        // memory associated with the previous user will not be available, so the chat model will treat you as a new user.
+        String res = ragService.askAIWithAdvisors("Tell me about mobile Gaming", "swaley123"); // Here we are using safeGuardAdvisor
+//        so that the mention text is consider as sensitive data. so it will return :- "I'm unable to respond to that due to sensitive content. Could we rephrase or discuss something else?"
         System.out.println(res);
     }
 

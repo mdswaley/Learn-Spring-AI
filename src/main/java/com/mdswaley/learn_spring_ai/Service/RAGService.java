@@ -4,6 +4,7 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.ai.chat.client.ChatClient;
 
 import org.springframework.ai.chat.client.advisor.MessageChatMemoryAdvisor;
+import org.springframework.ai.chat.client.advisor.SafeGuardAdvisor;
 import org.springframework.ai.chat.client.advisor.vectorstore.QuestionAnswerAdvisor;
 import org.springframework.ai.chat.client.advisor.vectorstore.VectorStoreChatMemoryAdvisor;
 import org.springframework.ai.chat.memory.ChatMemory;
@@ -143,6 +144,10 @@ public class RAGService {
                         """)
                 .user(prompt)
                 .advisors(
+                        SafeGuardAdvisor.builder().sensitiveWords(List.of(  // // Here we are using safeGuardAdvisor so that the mention text is consider as sensitive data.
+                                "politics",
+                                "gaming"
+                        )).build(),
 
                         MessageChatMemoryAdvisor.builder(chatMemory).build(),  // for short term msg storage
 
