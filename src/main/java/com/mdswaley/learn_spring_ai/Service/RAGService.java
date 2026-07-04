@@ -4,6 +4,7 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.ai.chat.client.ChatClient;
 
 import org.springframework.ai.chat.client.advisor.MessageChatMemoryAdvisor;
+import org.springframework.ai.chat.client.advisor.vectorstore.QuestionAnswerAdvisor;
 import org.springframework.ai.chat.client.advisor.vectorstore.VectorStoreChatMemoryAdvisor;
 import org.springframework.ai.chat.memory.ChatMemory;
 import org.springframework.ai.chat.prompt.PromptTemplate;
@@ -17,6 +18,7 @@ import org.springframework.beans.factory.annotation.Value;
 import org.springframework.core.io.Resource;
 import org.springframework.stereotype.Service;
 
+import javax.security.sasl.SaslServer;
 import java.util.List;
 import java.util.Map;
 import java.util.stream.Collectors;
@@ -142,13 +144,22 @@ public class RAGService {
                 .user(prompt)
                 .advisors(
 
-                        MessageChatMemoryAdvisor.builder(chatMemory).build(),
+                        MessageChatMemoryAdvisor.builder(chatMemory).build(),  // for short term msg storage
 
 
 
-                        VectorStoreChatMemoryAdvisor.builder(vectorStore)
+                        VectorStoreChatMemoryAdvisor.builder(vectorStore)  // for long term msg storage
                                 .defaultTopK(4)
-                        .build())
+                        .build(),
+
+                        QuestionAnswerAdvisor.builder(vectorStore)  // for question and answer purpose from given data source
+                                .searchRequest(SearchRequest.builder()
+                                        .filterExpression("file_name == 'faq.pdf'")
+                                        .topK(4)
+                                        .build())
+                                .build()
+
+                )
 
                 .advisors(a -> a.param(
                         ChatMemory.CONVERSATION_ID,  // here we use conversation_id bcz we want to get conversation history
