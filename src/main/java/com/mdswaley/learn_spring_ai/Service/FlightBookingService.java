@@ -8,6 +8,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.time.Instant;
+import java.util.List;
 
 @Service
 @RequiredArgsConstructor
@@ -16,6 +17,9 @@ public class FlightBookingService {
     private final FlightBookingRepository flightBookingRepository;
 
     public FlightBooking createBooking(String userId, String destination, Instant departureTime){
+
+//        In production level you need to pass user from security context holder. Not from parameter
+
         boolean exist = flightBookingRepository.existsByUserIdAndDestinationAndDepartureTime(userId, destination, departureTime);
 
         if(exist){
@@ -33,6 +37,27 @@ public class FlightBookingService {
                 .bookingStatus(BookingStatus.CONFIRMED)
                 .build();
 
+        return flightBookingRepository.save(booking);
+    }
+
+    public List<FlightBooking> getUserBooking(String userId){
+        FlightBooking exist = flightBookingRepository.findById(Long.parseLong(userId)).orElse(null);
+        if(exist == null){
+            throw new RuntimeException("User not found with id : "+userId);
+        }
+        return flightBookingRepository.findByUserIdOrderByDepartureTimeDesc(userId);
+    }
+
+    public FlightBooking updateBookingStatus(Long bookingId, String userId, BookingStatus newStatus){
+        FlightBooking booking = flightBookingRepository.findById(bookingId).orElseThrow(
+                () -> new IllegalArgumentException("Booking not found!")
+        );
+
+        if(!booking.getUserId().equals(userId)){
+            throw new IllegalArgumentException("You can only modify your own bookings");
+        }
+
+        booking.setBookingStatus(newStatus);
         return flightBookingRepository.save(booking);
     }
 }
