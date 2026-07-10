@@ -63,5 +63,32 @@ public class FlightBookingTools {
          return new BookingListRes(res, msg);
     }
 
+    @Tool(
+            name = "update_booking_status",
+            description = "Update the status of an existing flight booking (e.g., cancel it)." +
+                    "only the owner of the booking can modify it. "+
+                    "Common use: set status to cancelled."
+    )
+    public BookingResponse updateBookingStatus(
+            @ToolParam(description = "The booking ID returned from create or get booking")
+            Long bookingId,
+
+            @ToolParam(description = "The user ID who owns the booking")
+            String userId,
+
+            @ToolParam(description = "New status: CONFIRMED, CANCELLED, or PENDING")
+            BookingStatus bookingStatus
+    ){
+         FlightBooking update = flightBookingService.updateBookingStatus(bookingId, userId, bookingStatus);
+
+         return new BookingResponse(
+                 update.getId(),
+                 update.getDestination(),
+                 update.getDepartureTime(),
+                 update.getBookingStatus()
+         );
+
+    }
+
 
 }
